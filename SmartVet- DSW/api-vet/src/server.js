@@ -7,7 +7,8 @@ import cloudinary from 'cloudinary'
 import fileUpload from "express-fileupload"
 
 import routerVeterinarios from '../src/routers/veterinario_routes.js'
-import routerPacientes from '../src/routers/veterinario_routes.js'
+import routerPacientes from './routers/paciente_routers.js';
+
 
 // Inicializaciones
 const app = express();
@@ -22,6 +23,7 @@ cloudinary.config({
 
 // Middlewares
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
 app.use(cors())
  
 app.use(fileUpload({
