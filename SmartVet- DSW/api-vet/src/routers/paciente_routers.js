@@ -1,11 +1,12 @@
 import {Router} from 'express'
-import { actualizarPaciente, detallePaciente, eliminarPaciente, listarPacientes, registrarPaciente, loginPropietario } from '../controllers/paciente_controller.js'
+import { actualizarPaciente, detallePaciente, eliminarPaciente, listarPacientes, registrarPaciente, loginPropietario, perfilPropietario } from '../controllers/paciente_controller.js'
 
 import { verificarTokenJWT } from '../middlewares/JWT.js'
 
 const router = Router ()
 
 router.post('/paciente/login',loginPropietario)
+router.get('/paciente/perfil', verificarTokenJWT,perfilPropietario)
 
 router.post('/paciente/registro', verificarTokenJWT, registrarPaciente)
 router.get("/pacientes",verificarTokenJWT,listarPacientes)

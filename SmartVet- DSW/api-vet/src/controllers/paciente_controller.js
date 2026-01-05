@@ -117,7 +117,6 @@ const actualizarPaciente = async (req,res) => {
 }
 
 const loginPropietario = async(req,res)=>{
-
     try {
         // PASO 1
         const {email:emailPropietario,password:passwordPropietario} = req.body
@@ -141,11 +140,33 @@ const loginPropietario = async(req,res)=>{
     }
 }
 
+const perfilPropietario = async(req,res) => {
+    try{
+        //paso 1
+        //paso 2
+        //paso 3
+        const{_id, rol,nombrePropietario,cedulaPropietario,emailPropietario,celularPropietario,nombreMascota} = req.pacienteHeader
+        //paso 4
+        res.status(200).json({
+            _id,
+            rol,
+            nombrePropietario,
+            cedulaPropietario,
+            emailPropietario,
+            celularPropietario,
+            nombreMascota,
+        })
+    } catch (error) {
+        res.status(500).json({ msg: `❌ Error en el servidor - ${error}` })
+    }
+} 
+
 export{
     registrarPaciente,
     actualizarPaciente,
     listarPacientes,
     detallePaciente,
     eliminarPaciente,
-    loginPropietario
+    loginPropietario,
+    perfilPropietario
 }
