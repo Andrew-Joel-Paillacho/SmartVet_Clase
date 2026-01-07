@@ -3,6 +3,7 @@ import { useFetch } from "../../hooks/useFetch"
 import { useEffect, useState } from "react"
 import { useNavigate } from 'react-router'
 import { ToastContainer } from "react-toastify"
+import storeAuth from "../../context/storeAuth"
 
 
 const Table = () => {
@@ -11,6 +12,8 @@ const Table = () => {
 
     const fetchDataBackend = useFetch()
     const [patients, setPatients] = useState([])
+
+    const {rol} = storeAuth()
 
     const listPatients = async () => {
         const url = `${import.meta.env.VITE_BACKEND_URL}/pacientes`
@@ -96,11 +99,15 @@ const Table = () => {
 
 
                             <td className='py-2 text-center'>
-                                <MdPublishedWithChanges
-                                    title="Actualizar"
-                                    className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2 hover:text-blue-600"
-                                    onClick={() => navigate(`/dashboard/update/${patient._id}`)}
-                                />
+                                {
+                                    rol === "veterinario" && (
+                                        <MdPublishedWithChanges
+                                            title="Actualizar"
+                                            className="h-7 w-7 text-slate-800 cursor-pointer inline-block mr-2 hover:text-blue-600"
+                                            onClick={() => navigate(`/dashboard/update/${patient._id}`)}
+                                        />
+                                    )
+                                }
 
                                 <MdInfo
                                     title="Más información"
@@ -109,12 +116,16 @@ const Table = () => {
                                     onClick={() => navigate(`/dashboard/details/${patient._id}`)}
                                 />
 
-                                <MdDeleteForever
-                                    title="Eliminar"
-                                    className="h-7 w-7 text-red-900 cursor-pointer inline-block
-                                    hover:text-red-600"
-                                    onClick={()=>{deletePatient(patient._id)}}
-                                />
+                                {
+                                    rol==="veterinario" && (
+                                        <MdDeleteForever
+                                            title="Eliminar"
+                                            className="h-7 w-7 text-red-900 cursor-pointer inline-block
+                                            hover:text-red-600"
+                                            onClick={()=>{deletePatient(patient._id)}}
+                                        />
+                                    )
+                                }
                             </td>
                         </tr>
                     ))

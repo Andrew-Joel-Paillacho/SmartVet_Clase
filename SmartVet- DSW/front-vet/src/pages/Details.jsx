@@ -5,6 +5,7 @@ import ModalTreatments from "../components/treatments/Modal"
 
 import { useParams } from "react-router"
 import {useFetch} from "../hooks/useFetch"
+import storeAuth from "../context/storeAuth"
 
 const Details = () => {
     
@@ -13,6 +14,8 @@ const Details = () => {
     const  fetchDataBackend  = useFetch()
 
     const [treatments, setTreatments] = useState(["demo"])
+
+    const{rol} = storeAuth()
 
     const formatDate = (date) => {
         return new Date(date).toLocaleDateString('es-EC', { dateStyle: 'long', timeZone: 'UTC' })
@@ -129,7 +132,7 @@ const Details = () => {
                     {/* Apertura del modal tratamientos */}
                     <p>Este módulo te permite gestionar tratamientos</p>
                     {
-                        true &&
+                        rol === "veterinario" &&
                         (
                             <button className="px-5 py-2 bg-green-800 text-white rounded-lg hover:bg-green-700">
                                 Registrar
