@@ -7,7 +7,8 @@ import cloudinary from 'cloudinary'
 import fileUpload from "express-fileupload"
 
 import routerVeterinarios from '../src/routers/veterinario_routes.js'
-import routerPacientes from './routers/paciente_routers.js';
+import routerPacientes from './routers/paciente_routers.js'
+import routerTratamientos from './routers/tratamiento_routers.js'
 
 
 // Inicializaciones
@@ -42,6 +43,10 @@ app.use('/api', routerVeterinarios);
 
 // Rutas para pacientes
 app.use('/api', routerPacientes);
+
+// Rutas para tratamientos
+app.use('/api',routerTratamientos)
+
 
 // Manejo de una ruta que no sea encontrada (404)
 app.use((req, res) => res.status(404).send("Endpoint no encontrado - 404"));
