@@ -6,6 +6,9 @@ import ModalTreatments from "../components/treatments/Modal"
 import { useParams } from "react-router"
 import {useFetch} from "../hooks/useFetch"
 import storeAuth from "../context/storeAuth"
+import storeTreatments from "../context/storeTreatments"
+
+import { ToastContainer } from "react-toastify"
 
 const Details = () => {
     
@@ -13,31 +16,39 @@ const Details = () => {
     const [patient, setPatient] = useState({})
     const  fetchDataBackend  = useFetch()
 
-    const [treatments, setTreatments] = useState(["demo"])
+    const [treatments, setTreatments] = useState([])
 
     const{rol} = storeAuth()
+
+    const { modal, toggleModal } = storeTreatments()
 
     const formatDate = (date) => {
         return new Date(date).toLocaleDateString('es-EC', { dateStyle: 'long', timeZone: 'UTC' })
     }
 
-    useEffect(() => {
-        const listPatient = async () => {
-            const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/${id}`
-            const storedUser = JSON.parse(localStorage.getItem("auth-token"))
-            const headers= {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${storedUser.state.token}`
-            }
-            const response = await fetchDataBackend(url, null, "GET", headers)
-            setPatient(response)
+    const listPatient = async () => {
+        const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/${id}`
+        const storedUser = JSON.parse(localStorage.getItem("auth-token"))
+        const headers= {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${storedUser.state.token}`
         }
-        listPatient()
-    }, [])
+        const response = await fetchDataBackend(url, null, "GET", headers)
+        setPatient(response)
+        setTreatments(response.tratamientos)
+        console.log(response)
+    }
+
+    useEffect(() => {
+        if (modal == false) {
+            listPatient()
+        }
+    }, [modal])
 
 
     return (
         <>
+        <ToastContainer/>
             <div>
                 <h1 className='font-black text-4xl text-gray-500'>Visualizar</h1>
                 <hr className='my-4 border-t-2 border-gray-300' />
@@ -134,13 +145,14 @@ const Details = () => {
                     {
                         rol === "veterinario" &&
                         (
-                            <button className="px-5 py-2 bg-green-800 text-white rounded-lg hover:bg-green-700">
+                            <button className="px-5 py-2 bg-green-800 text-white rounded-lg hover:bg-green-700"
+                            onClick={()=>{toggleModal("treatments")}}>
                                 Registrar
                             </button>
                         )
                     }
 
-                    {false  && (<ModalTreatments/>)}
+                    {modal === "treatments" && (<ModalTreatments patientID={patient._id}/>)}
 
                 </div>
                 
@@ -153,7 +165,7 @@ const Details = () => {
                             <span className="font-medium">No existen registros</span>
                         </div>
                         :
-                        <TableTreatments treatments={treatments} />
+                        <TableTreatments treatments={treatments} listPatient={listPatient}/>
                 }
                 
             </div>
