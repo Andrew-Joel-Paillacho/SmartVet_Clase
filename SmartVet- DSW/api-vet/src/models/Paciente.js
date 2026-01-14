@@ -83,10 +83,10 @@ const pacienteSchema = new Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'Veterinario'
     },
-    tratamiento:{
+    tratamientos:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:'tratamiento'
-    }
+        ref:'Tratamiento'
+    }]
 },{
     timestamps: true
 })

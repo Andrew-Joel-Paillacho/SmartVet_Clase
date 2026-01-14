@@ -5,6 +5,7 @@ import Paciente from "../models/Paciente.js"
 import {v2 as cloudinary} from 'cloudinary'
 import fs from "fs-extra"
 import { crearTokenJWT } from "../middlewares/JWT.js"
+import Tratamiento from "../models/Tratamientos.js"
 
 const registrarPaciente = async(req,res)=>{
     try {
@@ -72,6 +73,10 @@ const detallePaciente = async (req,res) => {
         if( !mongoose.Types.ObjectId.isValid(id) ) return res.status(404).json({msg:`No existe el veterinario ${id}`});
         // paso 3
         const paciente = await Paciente.findById(id).select("-createdAt -updatedAt -__v").populate('veterinario','_id nombre apellido')
+        const tratamientos = await Tratamiento.find().where('paciente').equals(id)
+        console.log(tratamientos);
+        
+        paciente.tratamientos = tratamientos
         // paso 4
         res.status(200).json(paciente)
     }catch(error) {
