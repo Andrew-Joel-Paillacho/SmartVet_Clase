@@ -26,6 +26,7 @@ const storeTreatments = create(set=>({
             console.error(error)
         }
     },
+    
     deleteTreatments:async(url)=>{
         const isConfirmed  = confirm("Vas a eliminar el tratamiento ¿Estás seguro de realizar esta acción?")
         if (isConfirmed ) {
@@ -36,6 +37,17 @@ const storeTreatments = create(set=>({
                 console.error(error)
             }
         }
+    },
+
+    payTreatments:async(url,data)=>{
+        try {   
+            const respuesta = await axios.post(url,data,getAuthHeaders())
+            set((state)=>({modal:!state.modal}))
+            toast.success(respuesta.data.msg)
+        } catch (error) {
+            console.error(error)
+        }
+        
     }
 }))
 
